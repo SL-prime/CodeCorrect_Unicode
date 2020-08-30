@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Targets {
+    private List<String> suffixes;
     private List<Target> targets;
     public Targets(){
         targets = new ArrayList<Target>();
+        suffixes = new ArrayList<String>();
+        suffixes.add(".java");
+        suffixes.add(".txt");
     }
 
     /**
@@ -25,12 +29,31 @@ public class Targets {
             if (file.isDirectory()) {
                 scan(file.getAbsolutePath());
             } else {
-                if (!file.getName().equals("CodeCorrect_UTF8.jar")){
+                String filename = file.getName();
+                int sufstart = filename.lastIndexOf(".");
+                String suffix = "";
+                if (sufstart >= 0){
+                    suffix = filename.substring(sufstart, filename.length());
+                }
+                if (!filename.equals("CodeCorrect_UTF8.jar") && suffixCheck(suffix)){
                     new Target(this, file.getAbsolutePath());
                 }
             }
         }
         return;
+    }
+
+    /**
+     * 检测是否为需要处理的文件
+     * @param suffix
+     * @return true or false
+     */
+    private boolean suffixCheck(String suffix){
+        for(String s : suffixes){
+            if (s.equals(suffix))
+                return true;
+        }
+        return false;
     }
 
     /**
