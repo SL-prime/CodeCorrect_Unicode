@@ -1,19 +1,17 @@
-package nom.SL;
+package nom.sl;
 
 import java.io.*;
 
-public class Target {
-    private Targets targets;
+public class FileItem {
+    private Boolean isChange = Boolean.FALSE;
     private String address;
     private String info;
 
     /**
      *
-     * @param targets 文件链
      * @param address 文件地址
      */
-    public Target(Targets targets, String address){
-        this.targets = targets;
+    public FileItem(String address){
         this.address = address;
         this.info = "";
         try{
@@ -21,7 +19,6 @@ public class Target {
         }catch (IOException e){
             e.getMessage();
         }
-        targets.add(this);
     }
 
     /**
@@ -47,6 +44,10 @@ public class Target {
      * @throws IOException
      */
     public void saveFile() throws IOException{
+        if (!this.isChange){
+//            System.out.println("--this file have no change");
+            return;
+        }
         File file = new File(address);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         OutputStreamWriter out = new OutputStreamWriter(fileOutputStream);
@@ -59,12 +60,11 @@ public class Target {
         fileOutputStream.close();
     }
 
-    public Targets getTargets() {
-        return targets;
-    }
-
-    public void setTargets(Targets targets) {
-        this.targets = targets;
+    /**
+     * 文件发生改变
+     */
+    public void fileChange(){
+        this.isChange = Boolean.TRUE;
     }
 
     public String getAddress() {

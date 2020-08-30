@@ -1,15 +1,17 @@
-package nom.SL;
+package nom.sl;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Targets {
+public class CodeConvert {
     private List<String> suffixes;
-    private List<Target> targets;
-    public Targets(){
-        targets = new ArrayList<Target>();
+    private int type;
+    private int total = 0;
+
+    public CodeConvert(int type){
+        this.type = type;
         suffixes = new ArrayList<String>();
         suffixes.add(".java");
         suffixes.add(".txt");
@@ -29,6 +31,7 @@ public class Targets {
             if (file.isDirectory()) {
                 scan(file.getAbsolutePath());
             } else {
+                total++;
                 String filename = file.getName();
                 int sufstart = filename.lastIndexOf(".");
                 String suffix = "";
@@ -36,11 +39,25 @@ public class Targets {
                     suffix = filename.substring(sufstart, filename.length());
                 }
                 if (!filename.equals("CodeCorrect_UTF8.jar") && suffixCheck(suffix)){
-                    new Target(this, file.getAbsolutePath());
+                    System.out.println("-loading file " + file.getName());
+                    process(new FileItem(file.getAbsolutePath()));
                 }
             }
         }
+        summary();
         return;
+    }
+
+    /**
+     * 处理事务
+     * @param fileItem
+     */
+    private void process(FileItem fileItem){
+//        System.out.println("-correct code start");
+        Correct.correct(fileItem, type);
+//        System.out.println("-overwriting");
+        save(fileItem);
+//        System.out.println("-------------------------------------------------");
     }
 
     /**
@@ -57,51 +74,33 @@ public class Targets {
     }
 
     /**
-     * 编码
-     * @param type 编码类型
+     * 保存
      */
-    public void Correct(int type){
-        for(Target target : targets){
-            target.setInfo(Correct.correct(target.getInfo(), type));
+    private void save(FileItem fileItem){
+        try{
+            fileItem.saveFile();
+        }catch (IOException e){
+            e.getMessage();
         }
     }
 
     /**
-     * 保存
+     * 任务总结
      */
-    public void save(){
-        for(Target target : targets){
-            try{
-                target.saveFile();
-            }catch (IOException e){
-                e.getMessage();
-            }
-        }
+    private void summary(){
+        System.out.println("-------------------------------------------------");
+        System.out.println("total: " + total);
     }
 
     /**
      * 遍历文件
      * @param isshow 是否展示内容
      */
-    public void travel(Boolean isshow){
-        for(Target target : targets){
-            System.out.println("Address: " + target.getAddress());
-            if(isshow){
-                System.out.println("Info:\n" + target.getInfo());
-            }
+    public void show(FileItem fileItem, Boolean isshow){
+        System.out.println("Address: " + fileItem.getAddress());
+        if(isshow){
+            System.out.println("Info:\n" + fileItem.getInfo());
         }
     }
 
-    /**
-     * 新增路径
-     */
-    public void add(Target target){
-        targets.add(target);
-    }
-    /**
-     * 删除路径
-     */
-    public void del(Target target){
-        targets.remove(target);
-    }
 }

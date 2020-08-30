@@ -1,4 +1,4 @@
-package nom.SL;
+package nom.sl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,28 +10,29 @@ public class Correct {
 
     /**
      *
-     * @param info
+     * @param file
      * @param type
      * @return
      */
-    public static String correct(String info, int type){
+    public static void correct(FileItem file, int type){
         switch (type){
             case TO_UNICODE:
-                info = coding_unicode(info);
+                coding_unicode(file);
                 break;
             case TO_UTF8:
-                info = coding_utf8(info);
+                coding_utf8(file);
                 break;
         }
-        return info;
+        return;
     }
 
     /**
      *
-     * @param code
+     * @param file
      * @return
      */
-    private static String coding_unicode(String code){
+    private static void coding_unicode(FileItem file){
+        String code = file.getInfo();
         List<Integer> list = new ArrayList<Integer>();
         Integer start = 0;
         /**
@@ -40,6 +41,7 @@ public class Correct {
         * */
         start = code.indexOf("\\u", start);
         while(start != -1){
+            file.fileChange();
             //转码
             String unicode = code.substring(start + 2, start + 6);
             int chr = Integer.parseInt(unicode, 16);
@@ -48,16 +50,17 @@ public class Correct {
             code = code.replace(("\\u" + unicode), String.valueOf(ch));
             start = code.indexOf("\\u", start);
         }
-        return code;
+        file.setInfo(code);
+        return;
     }
 
     /**
      *
-     * @param code
+     * @param file
      * @return
      */
-    private static String coding_utf8(String code){
+    private static void coding_utf8(FileItem file){
 
-        return code;
+        return;
     }
 }
