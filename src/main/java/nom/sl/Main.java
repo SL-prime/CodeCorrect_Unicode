@@ -7,7 +7,7 @@ public class Main {
     public static void main(String args[]){
         root = args[0];
         menu();
-        new CodeConvert(Correct.TO_UNICODE).scan(root);
+        new CodeConvert(Correct.TO_UNICODE).start(root);
     }
 
     private static void menu(){

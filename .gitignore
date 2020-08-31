@@ -1,0 +1,37 @@
+HELP.md
+/out/
+/bytetcc/
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+logs/
+uvmp-workflow-1.0.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.DS_Store
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+/target/
+
+### VS Code ###
+.vscode/
+/bin/

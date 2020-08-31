@@ -19,9 +19,18 @@ public class CodeConvert {
 
     /**
      *
+     * @param root
+     */
+    public void start(String root){
+        scan(root);
+        summary();
+    }
+
+    /**
+     *
      * @param root 遍历根路径
      */
-    public void scan(String root){
+    private void scan(String root){
         File baseFile = new File(root);
         if (baseFile.isFile() || !baseFile.exists()) {
             return;
@@ -44,7 +53,6 @@ public class CodeConvert {
                 }
             }
         }
-        summary();
         return;
     }
 
