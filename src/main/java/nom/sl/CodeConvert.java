@@ -10,7 +10,7 @@ public class CodeConvert {
     private int type;
     private int total = 0;
 
-    public CodeConvert(int type){
+    public CodeConvert(int type) {
         this.type = type;
         suffixes = new ArrayList<String>();
         suffixes.add(".java");
@@ -18,19 +18,17 @@ public class CodeConvert {
     }
 
     /**
-     *
      * @param root
      */
-    public void start(String root){
+    public void start(String root) {
         scan(root);
         summary();
     }
 
     /**
-     *
      * @param root 遍历根路径
      */
-    private void scan(String root){
+    private void scan(String root) {
         File baseFile = new File(root);
         if (baseFile.isFile() || !baseFile.exists()) {
             return;
@@ -40,14 +38,14 @@ public class CodeConvert {
             if (file.isDirectory()) {
                 scan(file.getAbsolutePath());
             } else {
-                total++;
                 String filename = file.getName();
                 int sufstart = filename.lastIndexOf(".");
                 String suffix = "";
-                if (sufstart >= 0){
+                if (sufstart >= 0) {
                     suffix = filename.substring(sufstart, filename.length());
                 }
-                if (!filename.equals("CodeCorrect_UTF8.jar") && suffixCheck(suffix)){
+                if (!filename.equals("CodeCorrect_UTF8.jar") && suffixCheck(suffix)) {
+                    total++;
                     System.out.println("-loading file " + file.getName());
                     process(new FileItem(file.getAbsolutePath()));
                 }
@@ -58,9 +56,10 @@ public class CodeConvert {
 
     /**
      * 处理事务
+     *
      * @param fileItem
      */
-    private void process(FileItem fileItem){
+    private void process(FileItem fileItem) {
 //        System.out.println("-correct code start");
         Correct.correct(fileItem, type);
 //        System.out.println("-overwriting");
@@ -70,11 +69,12 @@ public class CodeConvert {
 
     /**
      * 检测是否为需要处理的文件
+     *
      * @param suffix
      * @return true or false
      */
-    private boolean suffixCheck(String suffix){
-        for(String s : suffixes){
+    private boolean suffixCheck(String suffix) {
+        for (String s : suffixes) {
             if (s.equals(suffix))
                 return true;
         }
@@ -84,10 +84,10 @@ public class CodeConvert {
     /**
      * 保存
      */
-    private void save(FileItem fileItem){
-        try{
+    private void save(FileItem fileItem) {
+        try {
             fileItem.saveFile();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.getMessage();
         }
     }
@@ -95,18 +95,19 @@ public class CodeConvert {
     /**
      * 任务总结
      */
-    private void summary(){
+    private void summary() {
         System.out.println("-------------------------------------------------");
         System.out.println("total: " + total);
     }
 
     /**
      * 遍历文件
+     *
      * @param isshow 是否展示内容
      */
-    public void show(FileItem fileItem, Boolean isshow){
+    public void show(FileItem fileItem, Boolean isshow) {
         System.out.println("Address: " + fileItem.getAddress());
-        if(isshow){
+        if (isshow) {
             System.out.println("Info:\n" + fileItem.getInfo());
         }
     }
